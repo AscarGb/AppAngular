@@ -39,6 +39,13 @@ namespace TestApp
             return user;
         }
 
+        public async Task<IdentityUser> FindUser(string userName)
+        {
+            IdentityUser user = await _userManager.FindByNameAsync(userName);
+
+            return user;
+        }
+
         public void Dispose()
         {
             _ctx.Dispose();

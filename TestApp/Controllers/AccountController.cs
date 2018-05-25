@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace TestApp.Controllers
@@ -39,6 +40,18 @@ namespace TestApp.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IHttpActionResult> UserInfo()
+        {
+            var result = await _repo.FindUser(User.Identity.Name);
+            return Ok(new
+            {
+                result.UserName,
+                result.Id
+            });
         }
 
         [HttpGet]

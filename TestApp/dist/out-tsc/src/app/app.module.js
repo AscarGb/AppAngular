@@ -10,13 +10,17 @@ var platform_browser_1 = require("@angular/platform-browser");
 var core_1 = require("@angular/core");
 var app_component_1 = require("./app.component");
 var angular_oauth2_oidc_1 = require("angular-oauth2-oidc");
-var home_component_1 = require("../home/home.component");
+var home_component_1 = require("./home/home.component");
 var http_1 = require("@angular/http");
 var router_1 = require("@angular/router");
-var foo_component_1 = require("../foo/foo.component");
-var login_component_1 = require("../login/login.component");
+var foo_component_1 = require("./foo/foo.component");
+var login_component_1 = require("./login/login.component");
 var forms_1 = require("@angular/forms");
 var AppService_1 = require("src/AppService");
+var orders_component_1 = require("./orders/orders.component");
+var order_component_1 = require("./order/order.component");
+var common_1 = require("@angular/common");
+var http_2 = require("@angular/common/http");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -26,9 +30,13 @@ var AppModule = /** @class */ (function () {
                 app_component_1.AppComponent,
                 home_component_1.HomeComponent,
                 foo_component_1.FooComponent,
-                login_component_1.LoginComponent
+                login_component_1.LoginComponent,
+                orders_component_1.OrdersComponent,
+                order_component_1.OrderComponent
             ],
             imports: [
+                http_2.HttpClientModule,
+                common_1.CommonModule,
                 forms_1.FormsModule,
                 platform_browser_1.BrowserModule,
                 http_1.HttpModule,

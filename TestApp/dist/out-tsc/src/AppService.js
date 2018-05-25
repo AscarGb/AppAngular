@@ -16,18 +16,20 @@ var http_1 = require("@angular/http");
 var rxjs_1 = require("rxjs");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/map");
+var http_2 = require("@angular/common/http");
 var Foo = /** @class */ (function () {
-    function Foo(id, name) {
+    function Foo(id, userName) {
         this.id = id;
-        this.name = name;
+        this.userName = userName;
     }
     return Foo;
 }());
 exports.Foo = Foo;
 var AppService = /** @class */ (function () {
-    function AppService(_router, _http) {
+    function AppService(_router, _http, http) {
         this._router = _router;
         this._http = _http;
+        this.http = http;
         this.serverAddr = 'http://localhost:8082';
     }
     AppService.prototype.obtainAccessToken = function (loginData) {
@@ -50,10 +52,9 @@ var AppService = /** @class */ (function () {
         this._router.navigate(['/']);
     };
     AppService.prototype.getResource = function (resourceUrl) {
-        var headers = new http_1.Headers({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Bearer ' + ng2_cookies_1.Cookie.get('access_token') });
-        var options = new http_1.RequestOptions({ headers: headers });
-        return this._http.get(this.serverAddr + "/" + resourceUrl, options)
-            .map(function (res) { return res.json(); })
+        var headers = new http_2.HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Bearer ' + ng2_cookies_1.Cookie.get('access_token') });
+        //var options = new RequestOptions({ headers: headers });
+        return this.http.get(this.serverAddr + "/" + resourceUrl, { headers: headers })
             .catch(function (error) { return rxjs_1.Observable.throw(error.json().error || 'Server error'); });
     };
     AppService.prototype.checkCredentials = function () {
@@ -67,7 +68,7 @@ var AppService = /** @class */ (function () {
     };
     AppService = __decorate([
         core_1.Injectable(),
-        __metadata("design:paramtypes", [router_1.Router, http_1.Http])
+        __metadata("design:paramtypes", [router_1.Router, http_1.Http, http_2.HttpClient])
     ], AppService);
     return AppService;
 }());

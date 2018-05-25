@@ -10,29 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var AppService_1 = require("src/AppService");
-var FooComponent = /** @class */ (function () {
-    function FooComponent(_service) {
-        this._service = _service;
+var core_2 = require("@angular/core");
+var OrderComponent = /** @class */ (function () {
+    function OrderComponent() {
     }
-    FooComponent.prototype.ngOnInit = function () {
-        this.getFoo();
+    OrderComponent.prototype.ngOnInit = function () {
     };
-    FooComponent.prototype.getFoo = function () {
-        var _this = this;
-        this._service.getResource('/api/Account/UserInfo')
-            .subscribe(function (data) { return _this.foo = data; }, function (error) { return _this.foo.userName = 'Error'; });
-    };
-    FooComponent = __decorate([
+    __decorate([
+        core_2.Input(),
+        __metadata("design:type", Object)
+    ], OrderComponent.prototype, "order", void 0);
+    OrderComponent = __decorate([
         core_1.Component({
-            selector: 'foo-details',
-            providers: [AppService_1.AppService],
-            templateUrl: './foo.component.html',
-            styleUrls: ['./foo.component.css']
+            selector: 'app-order',
+            templateUrl: './order.component.html',
+            styleUrls: ['./order.component.css']
         }),
-        __metadata("design:paramtypes", [AppService_1.AppService])
-    ], FooComponent);
-    return FooComponent;
+        __metadata("design:paramtypes", [])
+    ], OrderComponent);
+    return OrderComponent;
 }());
-exports.FooComponent = FooComponent;
-//# sourceMappingURL=foo.component.js.map
+exports.OrderComponent = OrderComponent;
+//# sourceMappingURL=order.component.js.map

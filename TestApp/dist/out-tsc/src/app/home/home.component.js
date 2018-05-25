@@ -14,13 +14,9 @@ var AppService_1 = require("src/AppService");
 var HomeComponent = /** @class */ (function () {
     function HomeComponent(_service) {
         this._service = _service;
-        this.isLoggedIn = false;
     }
     HomeComponent.prototype.ngOnInit = function () {
-        this.isLoggedIn = this._service.isLoggedIn();
-    };
-    HomeComponent.prototype.login = function () {
-        this._service.obtainAccessToken();
+        this._service.checkCredentials();
     };
     HomeComponent.prototype.logout = function () {
         this._service.logout();

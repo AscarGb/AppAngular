@@ -15,7 +15,7 @@ var FooComponent = /** @class */ (function () {
     function FooComponent(_service) {
         this._service = _service;
         this.foo = new AppService_1.Foo(1, 'sample foo');
-        this.foosUrl = 'http://localhost:8082/spring-security-oauth-resource/foos/';
+        this.foosUrl = this._service.serverAddr + '/api/Orders';
     }
     FooComponent.prototype.ngOnInit = function () {
     };

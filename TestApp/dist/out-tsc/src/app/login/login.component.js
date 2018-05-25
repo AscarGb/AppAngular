@@ -11,28 +11,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var AppService_1 = require("src/AppService");
-var FooComponent = /** @class */ (function () {
-    function FooComponent(_service) {
+var LoginComponent = /** @class */ (function () {
+    function LoginComponent(_service) {
         this._service = _service;
+        this.loginData = { username: "", password: "" };
     }
-    FooComponent.prototype.ngOnInit = function () {
-        this.getFoo();
+    LoginComponent.prototype.ngOnInit = function () {
     };
-    FooComponent.prototype.getFoo = function () {
-        var _this = this;
-        this._service.getResource('/api/Account/UserInfo')
-            .subscribe(function (data) { return _this.foo = data; }, function (error) { return _this.foo.userName = 'Error'; });
+    LoginComponent.prototype.login = function () {
+        this._service.obtainAccessToken(this.loginData);
     };
-    FooComponent = __decorate([
+    LoginComponent = __decorate([
         core_1.Component({
-            selector: 'foo-details',
-            providers: [AppService_1.AppService],
-            templateUrl: './foo.component.html',
-            styleUrls: ['./foo.component.css']
+            selector: 'app-login',
+            templateUrl: './login.component.html',
+            styleUrls: ['./login.component.css']
         }),
         __metadata("design:paramtypes", [AppService_1.AppService])
-    ], FooComponent);
-    return FooComponent;
+    ], LoginComponent);
+    return LoginComponent;
 }());
-exports.FooComponent = FooComponent;
-//# sourceMappingURL=foo.component.js.map
+exports.LoginComponent = LoginComponent;
+//# sourceMappingURL=login.component.js.map
