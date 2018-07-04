@@ -12,10 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var ng2_cookies_1 = require("ng2-cookies");
-var http_1 = require("@angular/http");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/map");
-var http_2 = require("@angular/common/http");
+var http_1 = require("@angular/common/http");
 require("rxjs/add/observable/empty");
 var UserInfo = /** @class */ (function () {
     function UserInfo(id, userName) {
@@ -26,9 +25,8 @@ var UserInfo = /** @class */ (function () {
 }());
 exports.UserInfo = UserInfo;
 var AppService = /** @class */ (function () {
-    function AppService(_router, _http, http) {
+    function AppService(_router, http) {
         this._router = _router;
-        this._http = _http;
         this.http = http;
         this.serverAddr = 'http://localhost:8082';
     }
@@ -39,7 +37,7 @@ var AppService = /** @class */ (function () {
         params.append('password', loginData.password);
         params.append('grant_type', 'password');
         params.append('client_id', 'ngAuth');
-        var headers = new http_2.HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        var headers = new http_1.HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
         this.http.post(this.serverAddr + '/token', params.toString(), { headers: headers })
             .subscribe(function (data) {
             _this.saveToken(data);
@@ -54,7 +52,7 @@ var AppService = /** @class */ (function () {
         params.append('refresh_token', ng2_cookies_1.Cookie.get('refresh_token'));
         params.append('grant_type', 'refresh_token');
         params.append('client_id', 'ngAuth');
-        var headers = new http_2.HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        var headers = new http_1.HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
         return this.http.post(this.serverAddr + '/token', params.toString(), { headers: headers });
     };
     AppService.prototype.saveToken = function (token) {
@@ -77,7 +75,7 @@ var AppService = /** @class */ (function () {
     };
     AppService = __decorate([
         core_1.Injectable(),
-        __metadata("design:paramtypes", [router_1.Router, http_1.Http, http_2.HttpClient])
+        __metadata("design:paramtypes", [router_1.Router, http_1.HttpClient])
     ], AppService);
     return AppService;
 }());

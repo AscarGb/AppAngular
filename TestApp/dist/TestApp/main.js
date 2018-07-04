@@ -38,11 +38,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var ng2_cookies__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ng2-cookies */ "./node_modules/ng2-cookies/index.js");
 /* harmony import */ var ng2_cookies__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ng2_cookies__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
-/* harmony import */ var rxjs_add_operator_catch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/add/operator/catch */ "./node_modules/rxjs-compat/_esm5/add/operator/catch.js");
-/* harmony import */ var rxjs_add_operator_map__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/add/operator/map */ "./node_modules/rxjs-compat/_esm5/add/operator/map.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var rxjs_add_observable_empty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/add/observable/empty */ "./node_modules/rxjs-compat/_esm5/add/observable/empty.js");
+/* harmony import */ var rxjs_add_operator_catch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/add/operator/catch */ "./node_modules/rxjs-compat/_esm5/add/operator/catch.js");
+/* harmony import */ var rxjs_add_operator_map__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/add/operator/map */ "./node_modules/rxjs-compat/_esm5/add/operator/map.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var rxjs_add_observable_empty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/add/observable/empty */ "./node_modules/rxjs-compat/_esm5/add/observable/empty.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -59,7 +58,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var UserInfo = /** @class */ (function () {
     function UserInfo(id, userName) {
         this.id = id;
@@ -69,9 +67,8 @@ var UserInfo = /** @class */ (function () {
 }());
 
 var AppService = /** @class */ (function () {
-    function AppService(_router, _http, http) {
+    function AppService(_router, http) {
         this._router = _router;
-        this._http = _http;
         this.http = http;
         this.serverAddr = 'http://localhost:8082';
     }
@@ -82,7 +79,7 @@ var AppService = /** @class */ (function () {
         params.append('password', loginData.password);
         params.append('grant_type', 'password');
         params.append('client_id', 'ngAuth');
-        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpHeaders"]({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpHeaders"]({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
         this.http.post(this.serverAddr + '/token', params.toString(), { headers: headers })
             .subscribe(function (data) {
             _this.saveToken(data);
@@ -97,7 +94,7 @@ var AppService = /** @class */ (function () {
         params.append('refresh_token', ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].get('refresh_token'));
         params.append('grant_type', 'refresh_token');
         params.append('client_id', 'ngAuth');
-        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpHeaders"]({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpHeaders"]({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
         return this.http.post(this.serverAddr + '/token', params.toString(), { headers: headers });
     };
     AppService.prototype.saveToken = function (token) {
@@ -120,7 +117,7 @@ var AppService = /** @class */ (function () {
     };
     AppService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
-        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _angular_http__WEBPACK_IMPORTED_MODULE_3__["Http"], _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"]])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClient"]])
     ], AppService);
     return AppService;
 }());

@@ -23,7 +23,7 @@ export class AppService {
     serverAddr: string = 'http://localhost:8082';
 
     constructor(
-        private _router: Router, private _http: Http, private http: HttpClient) { }
+        private _router: Router, private http: HttpClient) { }
 
     obtainAccessToken(loginData) {
         let params = new URLSearchParams();
