@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService, Foo } from 'src/AppService';
+import { AppService, UserInfo } from 'src/AppService';
 
 @Component({
     selector: 'foo-details',
@@ -9,16 +9,20 @@ import { AppService, Foo } from 'src/AppService';
 })
 export class FooComponent implements OnInit {
 
-    constructor(private _service: AppService) { }
+    public foo: UserInfo;
+
+    constructor(private _service: AppService) {
+        this.foo = new UserInfo('', '');
+    }
 
     ngOnInit() {
         this.getFoo();
     }
 
-    public foo: Foo;
+
 
     getFoo() {
-        this._service.getResource<Foo>('/api/Account/UserInfo')
+        this._service.getResource<UserInfo>('/api/Account/UserInfo')
             .subscribe(
             data => this.foo = data,
             error => this.foo.userName = 'Error');

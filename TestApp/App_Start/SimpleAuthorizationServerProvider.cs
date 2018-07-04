@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -7,15 +9,74 @@ namespace TestApp.App_Start
 {
     internal class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-        public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
+        public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
+            string clientId = string.Empty;
+            string clientSecret = string.Empty;
+            Client client = null;
+
+            if (!context.TryGetBasicCredentials(out clientId, out clientSecret))
+            {
+                context.TryGetFormCredentials(out clientId, out clientSecret);
+            }
+
+            if (context.ClientId == null)
+            {
+                //Remove the comments from the below line context.SetError, and invalidate context 
+                //if you want to force sending clientId/secrects once obtain access tokens. 
+                //context.Validated();
+                context.SetError("invalid_clientId", "ClientId should be sent.");
+                return Task.FromResult<object>(null);
+            }
+
+            using (AuthRepository _repo = new AuthRepository())
+            {
+                client = _repo.FindClient(context.ClientId);
+            }
+
+            if (client == null)
+            {
+                context.SetError("invalid_clientId", string.Format("Client '{0}' is not registered in the system.", context.ClientId));
+                return Task.FromResult<object>(null);
+            }
+
+            if (client.ApplicationType == Models.ApplicationTypes.NativeConfidential)
+            {
+                if (string.IsNullOrWhiteSpace(clientSecret))
+                {
+                    context.SetError("invalid_clientId", "Client secret should be sent.");
+                    return Task.FromResult<object>(null);
+                }
+                else
+                {
+                    if (client.Secret != Helper.GetHash(clientSecret))
+                    {
+                        context.SetError("invalid_clientId", "Client secret is invalid.");
+                        return Task.FromResult<object>(null);
+                    }
+                }
+            }
+
+            if (!client.Active)
+            {
+                context.SetError("invalid_clientId", "Client is inactive.");
+                return Task.FromResult<object>(null);
+            }
+
+            context.OwinContext.Set<string>("as:clientAllowedOrigin", client.AllowedOrigin);
+            context.OwinContext.Set<string>("as:clientRefreshTokenLifeTime", client.RefreshTokenLifeTime.ToString());
+
             context.Validated();
+            return Task.FromResult<object>(null);
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
 
-            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+            if (allowedOrigin == null) allowedOrigin = "*";
+
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
             using (AuthRepository _repo = new AuthRepository())
             {
@@ -26,14 +87,60 @@ namespace TestApp.App_Start
                     context.SetError("invalid_grant", "The user name or password is incorrect.");
                     return;
                 }
+
+                var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
+
+                foreach(var r in _repo.GetRoles(user))
+                {
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, r));
+                }
+                
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+
+                var props = new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    {
+                        "as:client_id", (context.ClientId == null) ? string.Empty : context.ClientId
+                    },
+                    {
+                        "userName", context.UserName
+                    }
+                });
+
+                var ticket = new AuthenticationTicket(claimsIdentity, props);
+                context.Validated(ticket);
+            }
+        }
+
+        public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
+        {
+            var originalClient = context.Ticket.Properties.Dictionary["as:client_id"];
+            var currentClient = context.ClientId;
+
+            if (originalClient != currentClient)
+            {
+                context.SetError("invalid_clientId", "Refresh token is issued to a different clientId.");
+                return Task.FromResult<object>(null);
             }
 
-            var identity = new ClaimsIdentity(context.Options.AuthenticationType);            
-            identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
-            identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            // Change auth ticket for refresh token requests
+            var claimsIdentity = new ClaimsIdentity(context.Ticket.Identity);
+           // newIdentity.AddClaim(new Claim("newClaim", "newValue"));
 
-            context.Validated(identity);
+            var ticket = new AuthenticationTicket(claimsIdentity, context.Ticket.Properties);
+            context.Validated(ticket);
 
+            return Task.FromResult<object>(null);
+        }
+
+        public override Task TokenEndpoint(OAuthTokenEndpointContext context)
+        {
+            foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
+            {
+                context.AdditionalResponseParameters.Add(property.Key, property.Value);
+            }
+
+            return Task.FromResult<object>(null);
         }
     }
 }

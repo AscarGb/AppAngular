@@ -14,6 +14,7 @@ var AppService_1 = require("src/AppService");
 var FooComponent = /** @class */ (function () {
     function FooComponent(_service) {
         this._service = _service;
+        this.foo = new AppService_1.UserInfo('', '');
     }
     FooComponent.prototype.ngOnInit = function () {
         this.getFoo();

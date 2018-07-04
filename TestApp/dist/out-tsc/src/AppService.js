@@ -13,18 +13,18 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var ng2_cookies_1 = require("ng2-cookies");
 var http_1 = require("@angular/http");
-var rxjs_1 = require("rxjs");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/map");
 var http_2 = require("@angular/common/http");
-var Foo = /** @class */ (function () {
-    function Foo(id, userName) {
+require("rxjs/add/observable/empty");
+var UserInfo = /** @class */ (function () {
+    function UserInfo(id, userName) {
         this.id = id;
         this.userName = userName;
     }
-    return Foo;
+    return UserInfo;
 }());
-exports.Foo = Foo;
+exports.UserInfo = UserInfo;
 var AppService = /** @class */ (function () {
     function AppService(_router, _http, http) {
         this._router = _router;
@@ -38,24 +38,32 @@ var AppService = /** @class */ (function () {
         params.append('username', loginData.username);
         params.append('password', loginData.password);
         params.append('grant_type', 'password');
-        //params.append('client_id', 'fooClientIdPassword');
-        // let headers = new Headers({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Basic ' + btoa("fooClientIdPassword:secret") });
-        var headers = new http_1.Headers({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
-        var options = new http_1.RequestOptions({ headers: headers });
-        this._http.post(this.serverAddr + '/token', params.toString(), options)
-            .map(function (res) { return res.json(); })
-            .subscribe(function (data) { return _this.saveToken(data); }, function (err) { return alert('Invalid Credentials'); });
+        params.append('client_id', 'ngAuth');
+        var headers = new http_2.HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        this.http.post(this.serverAddr + '/token', params.toString(), { headers: headers })
+            .subscribe(function (data) {
+            _this.saveToken(data);
+            _this._router.navigate(['/']);
+        });
+    };
+    AppService.prototype.getAuthToken = function () {
+        return ng2_cookies_1.Cookie.get('access_token');
+    };
+    AppService.prototype.refreshToken = function () {
+        var params = new URLSearchParams();
+        params.append('refresh_token', ng2_cookies_1.Cookie.get('refresh_token'));
+        params.append('grant_type', 'refresh_token');
+        params.append('client_id', 'ngAuth');
+        var headers = new http_2.HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        return this.http.post(this.serverAddr + '/token', params.toString(), { headers: headers });
     };
     AppService.prototype.saveToken = function (token) {
-        var expireDate = new Date().getTime() + (1000 * token.expires_in);
-        ng2_cookies_1.Cookie.set("access_token", token.access_token, expireDate);
-        this._router.navigate(['/']);
+        var store_period = 365;
+        ng2_cookies_1.Cookie.set("access_token", token.access_token, store_period);
+        ng2_cookies_1.Cookie.set("refresh_token", token.refresh_token, store_period);
     };
     AppService.prototype.getResource = function (resourceUrl) {
-        var headers = new http_2.HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Bearer ' + ng2_cookies_1.Cookie.get('access_token') });
-        //var options = new RequestOptions({ headers: headers });
-        return this.http.get(this.serverAddr + "/" + resourceUrl, { headers: headers })
-            .catch(function (error) { return rxjs_1.Observable.throw(error.json().error || 'Server error'); });
+        return this.http.get(this.serverAddr + "/" + resourceUrl);
     };
     AppService.prototype.checkCredentials = function () {
         if (!ng2_cookies_1.Cookie.check('access_token')) {
@@ -64,6 +72,7 @@ var AppService = /** @class */ (function () {
     };
     AppService.prototype.logout = function () {
         ng2_cookies_1.Cookie.delete('access_token');
+        ng2_cookies_1.Cookie.delete('refresh_token');
         this._router.navigate(['/login']);
     };
     AppService = __decorate([

@@ -27,22 +27,22 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*!***************************!*\
   !*** ./src/AppService.ts ***!
   \***************************/
-/*! exports provided: Foo, AppService */
+/*! exports provided: UserInfo, AppService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Foo", function() { return Foo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserInfo", function() { return UserInfo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppService", function() { return AppService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var ng2_cookies__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ng2-cookies */ "./node_modules/ng2-cookies/index.js");
 /* harmony import */ var ng2_cookies__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ng2_cookies__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var rxjs_add_operator_catch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/add/operator/catch */ "./node_modules/rxjs-compat/_esm5/add/operator/catch.js");
-/* harmony import */ var rxjs_add_operator_map__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/add/operator/map */ "./node_modules/rxjs-compat/_esm5/add/operator/map.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var rxjs_add_operator_catch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/add/operator/catch */ "./node_modules/rxjs-compat/_esm5/add/operator/catch.js");
+/* harmony import */ var rxjs_add_operator_map__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/add/operator/map */ "./node_modules/rxjs-compat/_esm5/add/operator/map.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var rxjs_add_observable_empty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/add/observable/empty */ "./node_modules/rxjs-compat/_esm5/add/observable/empty.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -60,12 +60,12 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-var Foo = /** @class */ (function () {
-    function Foo(id, userName) {
+var UserInfo = /** @class */ (function () {
+    function UserInfo(id, userName) {
         this.id = id;
         this.userName = userName;
     }
-    return Foo;
+    return UserInfo;
 }());
 
 var AppService = /** @class */ (function () {
@@ -81,24 +81,32 @@ var AppService = /** @class */ (function () {
         params.append('username', loginData.username);
         params.append('password', loginData.password);
         params.append('grant_type', 'password');
-        //params.append('client_id', 'fooClientIdPassword');
-        // let headers = new Headers({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Basic ' + btoa("fooClientIdPassword:secret") });
-        var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
-        var options = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["RequestOptions"]({ headers: headers });
-        this._http.post(this.serverAddr + '/token', params.toString(), options)
-            .map(function (res) { return res.json(); })
-            .subscribe(function (data) { return _this.saveToken(data); }, function (err) { return alert('Invalid Credentials'); });
+        params.append('client_id', 'ngAuth');
+        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpHeaders"]({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        this.http.post(this.serverAddr + '/token', params.toString(), { headers: headers })
+            .subscribe(function (data) {
+            _this.saveToken(data);
+            _this._router.navigate(['/']);
+        });
+    };
+    AppService.prototype.getAuthToken = function () {
+        return ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].get('access_token');
+    };
+    AppService.prototype.refreshToken = function () {
+        var params = new URLSearchParams();
+        params.append('refresh_token', ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].get('refresh_token'));
+        params.append('grant_type', 'refresh_token');
+        params.append('client_id', 'ngAuth');
+        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpHeaders"]({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        return this.http.post(this.serverAddr + '/token', params.toString(), { headers: headers });
     };
     AppService.prototype.saveToken = function (token) {
-        var expireDate = new Date().getTime() + (1000 * token.expires_in);
-        ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].set("access_token", token.access_token, expireDate);
-        this._router.navigate(['/']);
+        var store_period = 365;
+        ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].set("access_token", token.access_token, store_period);
+        ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].set("refresh_token", token.refresh_token, store_period);
     };
     AppService.prototype.getResource = function (resourceUrl) {
-        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpHeaders"]({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Bearer ' + ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].get('access_token') });
-        //var options = new RequestOptions({ headers: headers });
-        return this.http.get(this.serverAddr + "/" + resourceUrl, { headers: headers })
-            .catch(function (error) { return rxjs__WEBPACK_IMPORTED_MODULE_4__["Observable"].throw(error.json().error || 'Server error'); });
+        return this.http.get(this.serverAddr + "/" + resourceUrl);
     };
     AppService.prototype.checkCredentials = function () {
         if (!ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].check('access_token')) {
@@ -107,13 +115,122 @@ var AppService = /** @class */ (function () {
     };
     AppService.prototype.logout = function () {
         ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].delete('access_token');
+        ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].delete('refresh_token');
         this._router.navigate(['/login']);
     };
     AppService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
-        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _angular_http__WEBPACK_IMPORTED_MODULE_3__["Http"], _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClient"]])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _angular_http__WEBPACK_IMPORTED_MODULE_3__["Http"], _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"]])
     ], AppService);
     return AppService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/RequestInterceptorService.ts":
+/*!******************************************!*\
+  !*** ./src/RequestInterceptorService.ts ***!
+  \******************************************/
+/*! exports provided: RequestInterceptorService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestInterceptorService", function() { return RequestInterceptorService; });
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var src_AppService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/AppService */ "./src/AppService.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var RequestInterceptorService = /** @class */ (function () {
+    function RequestInterceptorService(injector) {
+        this.injector = injector;
+        this.isRefreshingToken = false;
+        this.tokenSubject = new rxjs__WEBPACK_IMPORTED_MODULE_0__["BehaviorSubject"](null);
+    }
+    RequestInterceptorService.prototype.addToken = function (req, token) {
+        return req.clone({ setHeaders: { Authorization: 'Bearer ' + token } });
+    };
+    RequestInterceptorService.prototype.intercept = function (req, next) {
+        var _this = this;
+        var appService = this.injector.get(src_AppService__WEBPACK_IMPORTED_MODULE_4__["AppService"]);
+        return next.handle(this.addToken(req, appService.getAuthToken())).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["catchError"])(function (error) {
+            if (error instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpErrorResponse"]) {
+                switch (error.status) {
+                    case 400:
+                        return _this.handle400Error(error);
+                    case 401:
+                        return _this.handle401Error(req, next);
+                }
+            }
+            else {
+                return Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["throwError"])(error);
+            }
+        }));
+    };
+    RequestInterceptorService.prototype.handle400Error = function (error) {
+        if (error && error.status === 400 && error.error && error.error.error === 'invalid_grant') {
+            // If we get a 400 and the error message is 'invalid_grant', the token is no longer valid so logout.
+            return this.logoutUser();
+        }
+        return Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["throwError"])(error);
+    };
+    RequestInterceptorService.prototype.handle401Error = function (req, next) {
+        var _this = this;
+        if (!this.isRefreshingToken) {
+            this.isRefreshingToken = true;
+            // Reset here so that the following requests wait until the token
+            // comes back from the refreshToken call.
+            this.tokenSubject.next(null);
+            var appService_1 = this.injector.get(src_AppService__WEBPACK_IMPORTED_MODULE_4__["AppService"]);
+            return appService_1.refreshToken().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["switchMap"])(function (newToken) {
+                if (newToken.access_token) {
+                    _this.tokenSubject.next(newToken.access_token);
+                    appService_1.saveToken(newToken);
+                    return next.handle(_this.addToken(req, newToken.access_token));
+                }
+                // If we don't get a new token, we are in trouble so logout.                    
+                return _this.logoutUser();
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["catchError"])(function (error) {
+                // If there is an exception calling 'refreshToken', bad news so logout.
+                return _this.logoutUser();
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["finalize"])(function () {
+                _this.isRefreshingToken = false;
+            }));
+        }
+        else {
+            return this.tokenSubject.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["filter"])(function (token) { return token != null; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["take"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["switchMap"])(function (token) {
+                return next.handle(_this.addToken(req, token));
+            }));
+        }
+    };
+    RequestInterceptorService.prototype.logoutUser = function () {
+        // Route to the login page (implementation up to you)      
+        var appService = this.injector.get(src_AppService__WEBPACK_IMPORTED_MODULE_4__["AppService"]);
+        appService.logout();
+        return Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["throwError"])("");
+    };
+    RequestInterceptorService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injector"]])
+    ], RequestInterceptorService);
+    return RequestInterceptorService;
 }());
 
 
@@ -202,12 +319,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _order_order_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./order/order.component */ "./src/app/order/order.component.ts");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var src_RequestInterceptorService__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! src/RequestInterceptorService */ "./src/RequestInterceptorService.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -248,7 +368,10 @@ var AppModule = /** @class */ (function () {
                     { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_8__["LoginComponent"] }
                 ])
             ],
-            providers: [src_AppService__WEBPACK_IMPORTED_MODULE_10__["AppService"]],
+            providers: [
+                { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_14__["HTTP_INTERCEPTORS"], useClass: src_RequestInterceptorService__WEBPACK_IMPORTED_MODULE_15__["RequestInterceptorService"], multi: true },
+                src_AppService__WEBPACK_IMPORTED_MODULE_10__["AppService"]
+            ],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_2__["AppComponent"]]
         })
     ], AppModule);
@@ -307,6 +430,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var FooComponent = /** @class */ (function () {
     function FooComponent(_service) {
         this._service = _service;
+        this.foo = new src_AppService__WEBPACK_IMPORTED_MODULE_1__["UserInfo"]('', '');
     }
     FooComponent.prototype.ngOnInit = function () {
         this.getFoo();

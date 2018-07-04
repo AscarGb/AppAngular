@@ -8,19 +8,20 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
+import 'rxjs/add/observable/empty';
+import { AuthData } from 'src/Types';
 
-
- 
-export class Foo {    
+export class UserInfo {
     constructor(
-        public id: number,
+        public id: string,
         public userName: string) { }
 }
 
 @Injectable()
-export class AppService {   
+export class AppService {
     serverAddr: string = 'http://localhost:8082';
-    
+
     constructor(
         private _router: Router, private _http: Http, private http: HttpClient) { }
 
@@ -29,30 +30,39 @@ export class AppService {
         params.append('username', loginData.username);
         params.append('password', loginData.password);
         params.append('grant_type', 'password');
-        //params.append('client_id', 'fooClientIdPassword');
-        // let headers = new Headers({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Basic ' + btoa("fooClientIdPassword:secret") });
-        let headers = new Headers({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
-        let options = new RequestOptions({ headers: headers });
+        params.append('client_id', 'ngAuth');  
 
-        this._http.post(this.serverAddr + '/token', params.toString(), options)
-            .map(res => res.json())
+        let headers = new HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+
+        this.http.post<AuthData>(this.serverAddr + '/token', params.toString(), { headers: headers })            
             .subscribe(
-            data => this.saveToken(data),
-            err => alert('Invalid Credentials'));
+            data => {
+                this.saveToken(data);
+                this._router.navigate(['/']);
+            });
     }
 
-    saveToken(token) {
-        var expireDate = new Date().getTime() + (1000 * token.expires_in);
-        Cookie.set("access_token", token.access_token, expireDate);
-        this._router.navigate(['/']);
+    getAuthToken() {
+        return Cookie.get('access_token');
     }
 
-    getResource<T>(resourceUrl): Observable<T> {
-        let headers = new HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Bearer ' + Cookie.get('access_token') });
-        //var options = new RequestOptions({ headers: headers });
-        return this.http.get<T>(this.serverAddr + "/" + resourceUrl, { headers: headers })
-            //.map((res: Response) => res.json())
-            .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    refreshToken() {
+        let params = new URLSearchParams();
+        params.append('refresh_token', Cookie.get('refresh_token'));
+        params.append('grant_type', 'refresh_token');
+        params.append('client_id', 'ngAuth');        
+        let headers = new HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
+        return this.http.post<AuthData>(this.serverAddr + '/token', params.toString(), { headers: headers });
+    }
+
+    saveToken(token: AuthData) {
+        let store_period = 365;
+        Cookie.set("access_token", token.access_token, store_period);
+        Cookie.set("refresh_token", token.refresh_token, store_period);
+    }
+
+    getResource<T>(resourceUrl: string): Observable<T> {
+        return this.http.get<T>(this.serverAddr + "/" + resourceUrl);
     }
 
     checkCredentials() {
@@ -63,6 +73,7 @@ export class AppService {
 
     logout() {
         Cookie.delete('access_token');
+        Cookie.delete('refresh_token');
         this._router.navigate(['/login']);
     }
 }

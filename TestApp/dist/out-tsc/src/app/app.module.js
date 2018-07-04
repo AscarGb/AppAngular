@@ -21,6 +21,8 @@ var orders_component_1 = require("./orders/orders.component");
 var order_component_1 = require("./order/order.component");
 var common_1 = require("@angular/common");
 var http_2 = require("@angular/common/http");
+var http_3 = require("@angular/common/http");
+var RequestInterceptorService_1 = require("src/RequestInterceptorService");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -46,7 +48,10 @@ var AppModule = /** @class */ (function () {
                     { path: 'login', component: login_component_1.LoginComponent }
                 ])
             ],
-            providers: [AppService_1.AppService],
+            providers: [
+                { provide: http_3.HTTP_INTERCEPTORS, useClass: RequestInterceptorService_1.RequestInterceptorService, multi: true },
+                AppService_1.AppService
+            ],
             bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);

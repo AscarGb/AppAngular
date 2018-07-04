@@ -10,4 +10,10 @@ var Order = /** @class */ (function () {
     return Order;
 }());
 exports.Order = Order;
+var AuthData = /** @class */ (function () {
+    function AuthData() {
+    }
+    return AuthData;
+}());
+exports.AuthData = AuthData;
 //# sourceMappingURL=Types.js.map

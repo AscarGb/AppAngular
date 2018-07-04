@@ -12,9 +12,9 @@ import { AppService } from 'src/AppService';
 import { OrdersComponent } from './orders/orders.component';
 import { OrderComponent } from './order/order.component';
 import { CommonModule } from '@angular/common';
-
-import { HttpClientModule} from '@angular/common/http';
-
+import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RequestInterceptorService } from 'src/RequestInterceptorService';
 
 @NgModule({
     declarations: [
@@ -36,7 +36,9 @@ import { HttpClientModule} from '@angular/common/http';
             { path: '', component: HomeComponent },
             { path: 'login', component: LoginComponent }])
     ],
-    providers: [AppService],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true },
+        AppService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
