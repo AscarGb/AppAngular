@@ -1,3 +1,1 @@
-Тестовое приложение с использованием<br/>
-ASP.NET MVC + Web API<br/>
-Angular oAuth<br/>
+ASP.NET Web API Angular 6 oAuth<br/>
