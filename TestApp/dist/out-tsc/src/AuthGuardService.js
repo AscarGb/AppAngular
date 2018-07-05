@@ -10,27 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var AppService_1 = require("src/AppService");
-var HomeComponent = /** @class */ (function () {
-    function HomeComponent(_service) {
-        this._service = _service;
+var router_1 = require("@angular/router");
+var AuthService_1 = require("src/AuthService");
+var AuthGuardService = /** @class */ (function () {
+    function AuthGuardService(auth, router) {
+        this.auth = auth;
+        this.router = router;
     }
-    HomeComponent.prototype.ngOnInit = function () {
-        //  this._service.checkCredentials();
+    AuthGuardService.prototype.canActivate = function () {
+        if (!this.auth.isAuthenticated()) {
+            this.router.navigate(['login']);
+            return false;
+        }
+        return true;
     };
-    HomeComponent.prototype.logout = function () {
-        this._service.logout();
-    };
-    HomeComponent = __decorate([
-        core_1.Component({
-            selector: 'home-header',
-            providers: [AppService_1.AppService],
-            templateUrl: './home.component.html',
-            styleUrls: ['./home.component.css']
-        }),
-        __metadata("design:paramtypes", [AppService_1.AppService])
-    ], HomeComponent);
-    return HomeComponent;
+    AuthGuardService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [AuthService_1.AuthService, router_1.Router])
+    ], AuthGuardService);
+    return AuthGuardService;
 }());
-exports.HomeComponent = HomeComponent;
-//# sourceMappingURL=home.component.js.map
+exports.AuthGuardService = AuthGuardService;
+//# sourceMappingURL=AuthGuardService.js.map

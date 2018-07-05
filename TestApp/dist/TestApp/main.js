@@ -59,9 +59,10 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var UserInfo = /** @class */ (function () {
-    function UserInfo(id, userName) {
+    function UserInfo(id, userName, roles) {
         this.id = id;
         this.userName = userName;
+        this.roles = roles;
     }
     return UserInfo;
 }());
@@ -101,6 +102,10 @@ var AppService = /** @class */ (function () {
         var store_period = 365;
         ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].set("access_token", token.access_token, store_period);
         ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].set("refresh_token", token.refresh_token, store_period);
+        ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].set("roles", token.roles, store_period);
+    };
+    AppService.prototype.userRoles = function () {
+        return JSON.parse(ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].get('roles'));
     };
     AppService.prototype.getResource = function (resourceUrl) {
         return this.http.get(this.serverAddr + "/" + resourceUrl);
@@ -120,6 +125,98 @@ var AppService = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClient"]])
     ], AppService);
     return AppService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/AuthGuardService.ts":
+/*!*********************************!*\
+  !*** ./src/AuthGuardService.ts ***!
+  \*********************************/
+/*! exports provided: AuthGuardService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthGuardService", function() { return AuthGuardService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var src_AuthService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/AuthService */ "./src/AuthService.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var AuthGuardService = /** @class */ (function () {
+    function AuthGuardService(auth, router) {
+        this.auth = auth;
+        this.router = router;
+    }
+    AuthGuardService.prototype.canActivate = function () {
+        if (!this.auth.isAuthenticated()) {
+            this.router.navigate(['login']);
+            return false;
+        }
+        return true;
+    };
+    AuthGuardService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [src_AuthService__WEBPACK_IMPORTED_MODULE_2__["AuthService"], _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
+    ], AuthGuardService);
+    return AuthGuardService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/AuthService.ts":
+/*!****************************!*\
+  !*** ./src/AuthService.ts ***!
+  \****************************/
+/*! exports provided: AuthService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var src_AppService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/AppService */ "./src/AppService.ts");
+/* harmony import */ var ng2_cookies__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ng2-cookies */ "./node_modules/ng2-cookies/index.js");
+/* harmony import */ var ng2_cookies__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ng2_cookies__WEBPACK_IMPORTED_MODULE_2__);
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var AuthService = /** @class */ (function () {
+    function AuthService(_service) {
+        this._service = _service;
+    }
+    AuthService.prototype.isAuthenticated = function () {
+        return ng2_cookies__WEBPACK_IMPORTED_MODULE_2__["Cookie"].check('access_token');
+    };
+    AuthService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [src_AppService__WEBPACK_IMPORTED_MODULE_1__["AppService"]])
+    ], AuthService);
+    return AuthService;
 }());
 
 
@@ -234,6 +331,126 @@ var RequestInterceptorService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/RoleGuardService.ts":
+/*!*********************************!*\
+  !*** ./src/RoleGuardService.ts ***!
+  \*********************************/
+/*! exports provided: RoleGuardService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RoleGuardService", function() { return RoleGuardService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var src_AuthService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/AuthService */ "./src/AuthService.ts");
+/* harmony import */ var src_AppService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/AppService */ "./src/AppService.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var RoleGuardService = /** @class */ (function () {
+    function RoleGuardService(auth, router, _service) {
+        this.auth = auth;
+        this.router = router;
+        this._service = _service;
+    }
+    RoleGuardService.prototype.canActivate = function (route) {
+        var expectedRole = route.data.expectedRole;
+        if (!this.auth.isAuthenticated() || !this._service.userRoles().some(function (a) { return a == expectedRole; })) {
+            this.router.navigate(['login']);
+            return false;
+        }
+        return true;
+    };
+    RoleGuardService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [src_AuthService__WEBPACK_IMPORTED_MODULE_2__["AuthService"], _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], src_AppService__WEBPACK_IMPORTED_MODULE_3__["AppService"]])
+    ], RoleGuardService);
+    return RoleGuardService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/admin/admin.component.css":
+/*!*******************************************!*\
+  !*** ./src/app/admin/admin.component.css ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/admin/admin.component.html":
+/*!********************************************!*\
+  !*** ./src/app/admin/admin.component.html ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  admin works!\n</p>\n"
+
+/***/ }),
+
+/***/ "./src/app/admin/admin.component.ts":
+/*!******************************************!*\
+  !*** ./src/app/admin/admin.component.ts ***!
+  \******************************************/
+/*! exports provided: AdminComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdminComponent", function() { return AdminComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var src_AppService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/AppService */ "./src/AppService.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var AdminComponent = /** @class */ (function () {
+    function AdminComponent(_service) {
+        this._service = _service;
+    }
+    AdminComponent.prototype.ngOnInit = function () {
+        this._service.checkCredentials();
+        this._service.userRoles().some(function (a) { return a == "Admin"; });
+    };
+    AdminComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-admin',
+            template: __webpack_require__(/*! ./admin.component.html */ "./src/app/admin/admin.component.html"),
+            styles: [__webpack_require__(/*! ./admin.component.css */ "./src/app/admin/admin.component.css")]
+        }),
+        __metadata("design:paramtypes", [src_AppService__WEBPACK_IMPORTED_MODULE_1__["AppService"]])
+    ], AdminComponent);
+    return AdminComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/app.component.css":
 /*!***********************************!*\
   !*** ./src/app/app.component.css ***!
@@ -317,12 +534,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var src_RequestInterceptorService__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! src/RequestInterceptorService */ "./src/RequestInterceptorService.ts");
+/* harmony import */ var _admin_admin_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./admin/admin.component */ "./src/app/admin/admin.component.ts");
+/* harmony import */ var src_AuthGuardService__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! src/AuthGuardService */ "./src/AuthGuardService.ts");
+/* harmony import */ var src_AuthService__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! src/AuthService */ "./src/AuthService.ts");
+/* harmony import */ var src_RoleGuardService__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! src/RoleGuardService */ "./src/RoleGuardService.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
 
 
 
@@ -351,7 +576,8 @@ var AppModule = /** @class */ (function () {
                 _foo_foo_component__WEBPACK_IMPORTED_MODULE_7__["FooComponent"],
                 _login_login_component__WEBPACK_IMPORTED_MODULE_8__["LoginComponent"],
                 _orders_orders_component__WEBPACK_IMPORTED_MODULE_11__["OrdersComponent"],
-                _order_order_component__WEBPACK_IMPORTED_MODULE_12__["OrderComponent"]
+                _order_order_component__WEBPACK_IMPORTED_MODULE_12__["OrderComponent"],
+                _admin_admin_component__WEBPACK_IMPORTED_MODULE_16__["AdminComponent"]
             ],
             imports: [
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_14__["HttpClientModule"],
@@ -361,13 +587,19 @@ var AppModule = /** @class */ (function () {
                 _angular_http__WEBPACK_IMPORTED_MODULE_5__["HttpModule"],
                 angular_oauth2_oidc__WEBPACK_IMPORTED_MODULE_3__["OAuthModule"].forRoot(),
                 _angular_router__WEBPACK_IMPORTED_MODULE_6__["RouterModule"].forRoot([
-                    { path: '', component: _home_home_component__WEBPACK_IMPORTED_MODULE_4__["HomeComponent"] },
-                    { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_8__["LoginComponent"] }
+                    { path: '', component: _home_home_component__WEBPACK_IMPORTED_MODULE_4__["HomeComponent"], canActivate: [src_AuthGuardService__WEBPACK_IMPORTED_MODULE_17__["AuthGuardService"]] },
+                    { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_8__["LoginComponent"] },
+                    {
+                        path: 'admin', component: _admin_admin_component__WEBPACK_IMPORTED_MODULE_16__["AdminComponent"], canActivate: [src_RoleGuardService__WEBPACK_IMPORTED_MODULE_19__["RoleGuardService"]],
+                        data: {
+                            expectedRole: 'Admin'
+                        }
+                    }
                 ])
             ],
             providers: [
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_14__["HTTP_INTERCEPTORS"], useClass: src_RequestInterceptorService__WEBPACK_IMPORTED_MODULE_15__["RequestInterceptorService"], multi: true },
-                src_AppService__WEBPACK_IMPORTED_MODULE_10__["AppService"]
+                src_AppService__WEBPACK_IMPORTED_MODULE_10__["AppService"], src_AuthGuardService__WEBPACK_IMPORTED_MODULE_17__["AuthGuardService"], src_AuthService__WEBPACK_IMPORTED_MODULE_18__["AuthService"], src_RoleGuardService__WEBPACK_IMPORTED_MODULE_19__["RoleGuardService"]
             ],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_2__["AppComponent"]]
         })
@@ -397,7 +629,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>user info</h4>\r\n<label>ID:</label><span>{{foo.id}}</span>\r\n<br />\r\n<label>Name:</label>  <span>{{foo.userName}}</span>\r\n"
+module.exports = "<h4>user info</h4>\r\n<label>ID:</label><span>{{foo.id}}</span>\r\n<br />\r\n<label>Name:</label>  <span>{{foo.userName}}</span>\r\n<br />\r\n<label>Roles:</label>\r\n<ul>\r\n    <li *ngFor=\"let role of foo.roles\">\r\n        {{role}}\r\n    </li>\r\n</ul>\r\n"
 
 /***/ }),
 
@@ -427,7 +659,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var FooComponent = /** @class */ (function () {
     function FooComponent(_service) {
         this._service = _service;
-        this.foo = new src_AppService__WEBPACK_IMPORTED_MODULE_1__["UserInfo"]('', '');
+        this.foo = new src_AppService__WEBPACK_IMPORTED_MODULE_1__["UserInfo"]('', '', ['']);
     }
     FooComponent.prototype.ngOnInit = function () {
         this.getFoo();
@@ -471,7 +703,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<span>Welcome !!</span>\r\n<a (click)=\"logout()\" href=\"#\">Logout</a>\r\n<foo-details></foo-details>\r\n<app-orders></app-orders>"
+module.exports = "<span>Welcome !!</span>\r\n<a (click)=\"logout()\" href=\"#\">Logout</a>\r\n<foo-details></foo-details>\r\n<!--app-orders></!--app-orders-->"
 
 /***/ }),
 
@@ -503,7 +735,7 @@ var HomeComponent = /** @class */ (function () {
         this._service = _service;
     }
     HomeComponent.prototype.ngOnInit = function () {
-        this._service.checkCredentials();
+        //  this._service.checkCredentials();
     };
     HomeComponent.prototype.logout = function () {
         this._service.logout();

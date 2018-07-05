@@ -7,7 +7,7 @@ namespace TestApp.UserManager
 {
     public static class ServerRoles
     {
-       public static readonly string User = "User";
-       public static readonly string Admin = "Admin";
+        public const string User = "User";
+        public const string Admin = "Admin";
     }
 }

@@ -17,9 +17,10 @@ require("rxjs/add/operator/map");
 var http_1 = require("@angular/common/http");
 require("rxjs/add/observable/empty");
 var UserInfo = /** @class */ (function () {
-    function UserInfo(id, userName) {
+    function UserInfo(id, userName, roles) {
         this.id = id;
         this.userName = userName;
+        this.roles = roles;
     }
     return UserInfo;
 }());
@@ -59,6 +60,10 @@ var AppService = /** @class */ (function () {
         var store_period = 365;
         ng2_cookies_1.Cookie.set("access_token", token.access_token, store_period);
         ng2_cookies_1.Cookie.set("refresh_token", token.refresh_token, store_period);
+        ng2_cookies_1.Cookie.set("roles", token.roles, store_period);
+    };
+    AppService.prototype.userRoles = function () {
+        return JSON.parse(ng2_cookies_1.Cookie.get('roles'));
     };
     AppService.prototype.getResource = function (resourceUrl) {
         return this.http.get(this.serverAddr + "/" + resourceUrl);

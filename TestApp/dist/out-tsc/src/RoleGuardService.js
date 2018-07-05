@@ -10,27 +10,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var AuthService_1 = require("src/AuthService");
 var AppService_1 = require("src/AppService");
-var HomeComponent = /** @class */ (function () {
-    function HomeComponent(_service) {
+var RoleGuardService = /** @class */ (function () {
+    function RoleGuardService(auth, router, _service) {
+        this.auth = auth;
+        this.router = router;
         this._service = _service;
     }
-    HomeComponent.prototype.ngOnInit = function () {
-        //  this._service.checkCredentials();
+    RoleGuardService.prototype.canActivate = function (route) {
+        var expectedRole = route.data.expectedRole;
+        if (!this.auth.isAuthenticated() || !this._service.userRoles().some(function (a) { return a == expectedRole; })) {
+            this.router.navigate(['login']);
+            return false;
+        }
+        return true;
     };
-    HomeComponent.prototype.logout = function () {
-        this._service.logout();
-    };
-    HomeComponent = __decorate([
-        core_1.Component({
-            selector: 'home-header',
-            providers: [AppService_1.AppService],
-            templateUrl: './home.component.html',
-            styleUrls: ['./home.component.css']
-        }),
-        __metadata("design:paramtypes", [AppService_1.AppService])
-    ], HomeComponent);
-    return HomeComponent;
+    RoleGuardService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [AuthService_1.AuthService, router_1.Router, AppService_1.AppService])
+    ], RoleGuardService);
+    return RoleGuardService;
 }());
-exports.HomeComponent = HomeComponent;
-//# sourceMappingURL=home.component.js.map
+exports.RoleGuardService = RoleGuardService;
+//# sourceMappingURL=RoleGuardService.js.map

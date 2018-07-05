@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -104,6 +105,9 @@ namespace TestApp.App_Start
                     },
                     {
                         "userName", context.UserName
+                    },
+                    {
+                        "roles", JsonConvert.SerializeObject(_repo.GetRoles(user))
                     }
                 });
 

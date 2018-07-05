@@ -2,3 +2,10 @@
 <label>ID:</label><span>{{foo.id}}</span>
 <br />
 <label>Name:</label>  <span>{{foo.userName}}</span>
+<br />
+<label>Roles:</label>
+<ul>
+    <li *ngFor="let role of foo.roles">
+        {{role}}
+    </li>
+</ul>

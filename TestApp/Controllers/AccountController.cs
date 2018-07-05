@@ -45,12 +45,13 @@ namespace TestApp.Controllers
         [HttpGet]
         [Authorize]
         public async Task<IHttpActionResult> UserInfo()
-        {
-            var result = await _repo.FindUser(User.Identity.Name);
+        {            
+            var user = await _repo.FindUser(User.Identity.Name);
             return Ok(new
             {
-                result.UserName,
-                result.Id
+                user.UserName,
+                user.Id,
+                roles = _repo.GetRoles(user)
             });
         }
 

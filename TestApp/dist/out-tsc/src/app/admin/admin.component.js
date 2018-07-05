@@ -11,26 +11,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var AppService_1 = require("src/AppService");
-var HomeComponent = /** @class */ (function () {
-    function HomeComponent(_service) {
+var AdminComponent = /** @class */ (function () {
+    function AdminComponent(_service) {
         this._service = _service;
     }
-    HomeComponent.prototype.ngOnInit = function () {
-        //  this._service.checkCredentials();
+    AdminComponent.prototype.ngOnInit = function () {
+        this._service.checkCredentials();
+        this._service.userRoles().some(function (a) { return a == "Admin"; });
     };
-    HomeComponent.prototype.logout = function () {
-        this._service.logout();
-    };
-    HomeComponent = __decorate([
+    AdminComponent = __decorate([
         core_1.Component({
-            selector: 'home-header',
-            providers: [AppService_1.AppService],
-            templateUrl: './home.component.html',
-            styleUrls: ['./home.component.css']
+            selector: 'app-admin',
+            templateUrl: './admin.component.html',
+            styleUrls: ['./admin.component.css']
         }),
         __metadata("design:paramtypes", [AppService_1.AppService])
-    ], HomeComponent);
-    return HomeComponent;
+    ], AdminComponent);
+    return AdminComponent;
 }());
-exports.HomeComponent = HomeComponent;
-//# sourceMappingURL=home.component.js.map
+exports.AdminComponent = AdminComponent;
+//# sourceMappingURL=admin.component.js.map

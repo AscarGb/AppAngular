@@ -5,9 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using TestApp.UserManager;
 
 namespace TestApp.Controllers
 {
+    [Authorize(Roles = ServerRoles.Admin)]
     [RoutePrefix("api/RefreshTokens")]
     public class RefreshTokensController : ApiController
     {
@@ -17,16 +19,13 @@ namespace TestApp.Controllers
         {
             _repo = new AuthRepository();
         }
-
-        [Authorize(Users = "Admin")]
+        
         [Route("")]
         public IHttpActionResult Get()
         {
             return Ok(_repo.GetAllRefreshTokens());
-        }
-
-        //[Authorize(Users = "Admin")]
-        [AllowAnonymous]
+        }        
+        
         [Route("")]
         public async Task<IHttpActionResult> Delete(string tokenId)
         {

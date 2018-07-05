@@ -12,7 +12,7 @@ export class FooComponent implements OnInit {
     public foo: UserInfo;
 
     constructor(private _service: AppService) {
-        this.foo = new UserInfo('', '');
+        this.foo = new UserInfo('', '',['']);
     }
 
     ngOnInit() {

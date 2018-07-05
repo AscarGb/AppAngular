@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^6.0.2",
     "@angular/platform-browser-dynamic": "^6.0.2",
     "@angular/router": "^6.0.2",
+    "@auth0/angular-jwt": "^2.0.0",
     "@servicestack/client": "^1.0.14",
     "angular-oauth2-oidc": "^4.0.2",
     "core-js": "^2.5.4",

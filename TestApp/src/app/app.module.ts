@@ -15,6 +15,10 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RequestInterceptorService } from 'src/RequestInterceptorService';
+import { AdminComponent } from './admin/admin.component';
+import { AuthGuardService } from 'src/AuthGuardService';
+import { AuthService } from 'src/AuthService';
+import { RoleGuardService } from 'src/RoleGuardService';
 
 @NgModule({
     declarations: [
@@ -23,7 +27,8 @@ import { RequestInterceptorService } from 'src/RequestInterceptorService';
         FooComponent,
         LoginComponent,
         OrdersComponent,
-        OrderComponent
+        OrderComponent,
+        AdminComponent
     ],
     imports: [
         HttpClientModule,
@@ -33,12 +38,17 @@ import { RequestInterceptorService } from 'src/RequestInterceptorService';
         HttpModule,
         OAuthModule.forRoot(),
         RouterModule.forRoot([
-            { path: '', component: HomeComponent },
-            { path: 'login', component: LoginComponent }])
+            { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
+            { path: 'login', component: LoginComponent },
+            {
+                path: 'admin', component: AdminComponent, canActivate: [RoleGuardService],
+                data: {
+                    expectedRole: 'Admin'
+                } }])
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true },
-        AppService],
+        AppService, AuthGuardService, AuthService, RoleGuardService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -15,7 +15,8 @@ import { AuthData } from 'src/Types';
 export class UserInfo {
     constructor(
         public id: string,
-        public userName: string) { }
+        public userName: string,
+        public roles: string[]) { }
 }
 
 @Injectable()
@@ -42,7 +43,7 @@ export class AppService {
             });
     }
 
-    getAuthToken() {
+    getAuthToken() {        
         return Cookie.get('access_token');
     }
 
@@ -59,6 +60,11 @@ export class AppService {
         let store_period = 365;
         Cookie.set("access_token", token.access_token, store_period);
         Cookie.set("refresh_token", token.refresh_token, store_period);
+        Cookie.set("roles", token.roles, store_period);
+    }
+
+    userRoles(): string[] {
+        return JSON.parse(Cookie.get('roles'));
     }
 
     getResource<T>(resourceUrl: string): Observable<T> {

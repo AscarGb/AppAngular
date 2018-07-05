@@ -23,6 +23,10 @@ var common_1 = require("@angular/common");
 var http_2 = require("@angular/common/http");
 var http_3 = require("@angular/common/http");
 var RequestInterceptorService_1 = require("src/RequestInterceptorService");
+var admin_component_1 = require("./admin/admin.component");
+var AuthGuardService_1 = require("src/AuthGuardService");
+var AuthService_1 = require("src/AuthService");
+var RoleGuardService_1 = require("src/RoleGuardService");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -34,7 +38,8 @@ var AppModule = /** @class */ (function () {
                 foo_component_1.FooComponent,
                 login_component_1.LoginComponent,
                 orders_component_1.OrdersComponent,
-                order_component_1.OrderComponent
+                order_component_1.OrderComponent,
+                admin_component_1.AdminComponent
             ],
             imports: [
                 http_2.HttpClientModule,
@@ -44,13 +49,19 @@ var AppModule = /** @class */ (function () {
                 http_1.HttpModule,
                 angular_oauth2_oidc_1.OAuthModule.forRoot(),
                 router_1.RouterModule.forRoot([
-                    { path: '', component: home_component_1.HomeComponent },
-                    { path: 'login', component: login_component_1.LoginComponent }
+                    { path: '', component: home_component_1.HomeComponent, canActivate: [AuthGuardService_1.AuthGuardService] },
+                    { path: 'login', component: login_component_1.LoginComponent },
+                    {
+                        path: 'admin', component: admin_component_1.AdminComponent, canActivate: [RoleGuardService_1.RoleGuardService],
+                        data: {
+                            expectedRole: 'Admin'
+                        }
+                    }
                 ])
             ],
             providers: [
                 { provide: http_3.HTTP_INTERCEPTORS, useClass: RequestInterceptorService_1.RequestInterceptorService, multi: true },
-                AppService_1.AppService
+                AppService_1.AppService, AuthGuardService_1.AuthGuardService, AuthService_1.AuthService, RoleGuardService_1.RoleGuardService
             ],
             bootstrap: [app_component_1.AppComponent]
         })
