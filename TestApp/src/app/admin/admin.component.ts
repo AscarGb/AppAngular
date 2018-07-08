@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/AppService';
+import { RefreshToken } from 'src/Types';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
     selector: 'app-admin',
@@ -8,11 +10,28 @@ import { AppService } from 'src/AppService';
 })
 export class AdminComponent implements OnInit {
 
-    constructor(private _service: AppService) { }
+    refreshToken: RefreshToken[];
 
-    ngOnInit() {
-        this._service.checkCredentials();
-        this._service.userRoles().some(a => a == "Admin")
+    constructor(private _service: AppService, private http: HttpClient) {
     }
 
+    ngOnInit() {
+        this.getTokens();
+    }
+
+    getTokens() {
+        this._service.getResource<RefreshToken[]>('/api/RefreshTokens')
+            .subscribe(
+            data => this.refreshToken = data
+            );
+    }
+    remToken(token: RefreshToken) {
+        this.http.post<any>(this._service.serverAddr + '/api/RefreshTokens/Delete', { tokenId: token.id })
+            .subscribe(
+            data => {
+                this.getTokens();
+            }
+            );
+        return false;
+    }
 }

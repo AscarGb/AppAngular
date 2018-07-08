@@ -402,7 +402,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  admin works!\n</p>\n"
+module.exports = "<table class=\"table table-striped\">\r\n    <thead class=\"thead-dark\">\r\n        <tr>\r\n            <th>Action</th>\r\n            <th>Subject</th>\r\n            <th>ClientId</th>\r\n            <th>IssuedUtc</th>\r\n            <th>ExpiresUtc</th>\r\n        </tr>\r\n    </thead>\r\n    <tr *ngFor=\"let token of refreshToken\">\r\n        <td><a href=\"\" (click)=\"remToken(token)\">Remove</a></td>\r\n        <td>{{token.subject}}</td>\r\n        <td>{{token.clientId}}</td>\r\n        <td>{{token.issuedUtc}}</td>\r\n        <td>{{token.expiresUtc}}</td>\r\n    </tr>\r\n</table>\n"
 
 /***/ }),
 
@@ -418,6 +418,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdminComponent", function() { return AdminComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var src_AppService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/AppService */ "./src/AppService.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -429,13 +430,27 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
 var AdminComponent = /** @class */ (function () {
-    function AdminComponent(_service) {
+    function AdminComponent(_service, http) {
         this._service = _service;
+        this.http = http;
     }
     AdminComponent.prototype.ngOnInit = function () {
-        this._service.checkCredentials();
-        this._service.userRoles().some(function (a) { return a == "Admin"; });
+        this.getTokens();
+    };
+    AdminComponent.prototype.getTokens = function () {
+        var _this = this;
+        this._service.getResource('/api/RefreshTokens')
+            .subscribe(function (data) { return _this.refreshToken = data; });
+    };
+    AdminComponent.prototype.remToken = function (token) {
+        var _this = this;
+        this.http.post(this._service.serverAddr + '/api/RefreshTokens/Delete', { tokenId: token.id })
+            .subscribe(function (data) {
+            _this.getTokens();
+        });
+        return false;
     };
     AdminComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -443,7 +458,7 @@ var AdminComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./admin.component.html */ "./src/app/admin/admin.component.html"),
             styles: [__webpack_require__(/*! ./admin.component.css */ "./src/app/admin/admin.component.css")]
         }),
-        __metadata("design:paramtypes", [src_AppService__WEBPACK_IMPORTED_MODULE_1__["AppService"]])
+        __metadata("design:paramtypes", [src_AppService__WEBPACK_IMPORTED_MODULE_1__["AppService"], _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
     ], AdminComponent);
     return AdminComponent;
 }());

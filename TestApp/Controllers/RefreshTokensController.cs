@@ -24,12 +24,13 @@ namespace TestApp.Controllers
         public IHttpActionResult Get()
         {
             return Ok(_repo.GetAllRefreshTokens());
-        }        
-        
-        [Route("")]
-        public async Task<IHttpActionResult> Delete(string tokenId)
+        }
+
+        [Route("Delete")]
+        [HttpPost]
+        public async Task<IHttpActionResult> Delete(DeleteTokenModel token)
         {
-            var result = await _repo.RemoveRefreshToken(tokenId);
+            var result = await _repo.RemoveRefreshToken(token.tokenId);
             if (result)
             {
                 return Ok();

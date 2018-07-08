@@ -1,3 +1,18 @@
-<p>
-  admin works!
-</p>
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Action</th>
+            <th>Subject</th>
+            <th>ClientId</th>
+            <th>IssuedUtc</th>
+            <th>ExpiresUtc</th>
+        </tr>
+    </thead>
+    <tr *ngFor="let token of refreshToken">
+        <td><a href="" (click)="remToken(token)">Remove</a></td>
+        <td>{{token.subject}}</td>
+        <td>{{token.clientId}}</td>
+        <td>{{token.issuedUtc}}</td>
+        <td>{{token.expiresUtc}}</td>
+    </tr>
+</table>

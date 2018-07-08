@@ -1,4 +1,6 @@
-﻿export interface IOrder {
+﻿import { Data } from "@angular/router/src/config";
+
+export interface IOrder {
     orderID: number;
     customerName: string;
     shipperCity: string;
@@ -25,4 +27,13 @@ export class AuthData {
     expires_in: number
     refresh_token: string;
     roles: string
+}
+
+export class RefreshToken {
+    id: string;
+    subject: string;
+    clientId: string;
+    issuedUtc: Date;
+    expiresUtc: Date;
+    protectedTicket: string;
 }

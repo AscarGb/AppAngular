@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Http;
 using TestApp.App_Start;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace TestApp.App_Start
-{    
+{
     public class Startup
     {
         public void Configuration(IAppBuilder app)
@@ -30,7 +31,7 @@ namespace TestApp.App_Start
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(10),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["AccessTokenExpireTimeSpan"])),
                 Provider = new SimpleAuthorizationServerProvider(),
                 RefreshTokenProvider = new SimpleRefreshTokenProvider()
             };

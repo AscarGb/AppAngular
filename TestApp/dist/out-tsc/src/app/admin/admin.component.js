@@ -11,13 +11,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var AppService_1 = require("src/AppService");
+var http_1 = require("@angular/common/http");
 var AdminComponent = /** @class */ (function () {
-    function AdminComponent(_service) {
+    function AdminComponent(_service, http) {
         this._service = _service;
+        this.http = http;
     }
     AdminComponent.prototype.ngOnInit = function () {
-        this._service.checkCredentials();
-        this._service.userRoles().some(function (a) { return a == "Admin"; });
+        this.getTokens();
+    };
+    AdminComponent.prototype.getTokens = function () {
+        var _this = this;
+        this._service.getResource('/api/RefreshTokens')
+            .subscribe(function (data) { return _this.refreshToken = data; });
+    };
+    AdminComponent.prototype.remToken = function (token) {
+        var _this = this;
+        this.http.post(this._service.serverAddr + '/api/RefreshTokens/Delete', { tokenId: token.id })
+            .subscribe(function (data) {
+            _this.getTokens();
+        });
+        return false;
     };
     AdminComponent = __decorate([
         core_1.Component({
@@ -25,7 +39,7 @@ var AdminComponent = /** @class */ (function () {
             templateUrl: './admin.component.html',
             styleUrls: ['./admin.component.css']
         }),
-        __metadata("design:paramtypes", [AppService_1.AppService])
+        __metadata("design:paramtypes", [AppService_1.AppService, http_1.HttpClient])
     ], AdminComponent);
     return AdminComponent;
 }());

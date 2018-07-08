@@ -16,4 +16,10 @@ var AuthData = /** @class */ (function () {
     return AuthData;
 }());
 exports.AuthData = AuthData;
+var RefreshToken = /** @class */ (function () {
+    function RefreshToken() {
+    }
+    return RefreshToken;
+}());
+exports.RefreshToken = RefreshToken;
 //# sourceMappingURL=Types.js.map
