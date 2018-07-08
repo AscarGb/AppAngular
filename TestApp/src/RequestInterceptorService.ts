@@ -25,12 +25,13 @@ export class RequestInterceptorService implements HttpInterceptor {
 
         return next.handle(this.addToken(req, appService.getAuthToken())).pipe(
             catchError(error => {
-                if (error instanceof HttpErrorResponse) {
+                if (error instanceof HttpErrorResponse) {                    
                     switch ((<HttpErrorResponse>error).status) {
                         case 400:
                             return this.handle400Error(error);
                         case 401:
                             return this.handle401Error(req, next);
+                        default: return observableThrowError(error);
                     }
                 } else {
                     return observableThrowError(error);

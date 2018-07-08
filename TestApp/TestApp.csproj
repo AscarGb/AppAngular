@@ -162,10 +162,12 @@
     <Content Include="src\app\login\login.component.html" />
     <Content Include="src\app\order\order.component.css" />
     <Content Include="src\app\order\order.component.html" />
+    <Content Include="src\app\register\register.component.css" />
+    <Content Include="src\app\register\register.component.html" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\index.html" />
     <Content Include="src\karma.conf.js" />
-    <Content Include="src\styles.css" />
+    <None Include="src\styles.scss" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -236,6 +238,8 @@
     <TypeScriptCompile Include="src\app\login\login.component.ts" />
     <TypeScriptCompile Include="src\app\order\order.component.spec.ts" />
     <TypeScriptCompile Include="src\app\order\order.component.ts" />
+    <TypeScriptCompile Include="src\app\register\register.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\register\register.component.ts" />
     <TypeScriptCompile Include="src\AuthGuardService.ts" />
     <TypeScriptCompile Include="src\AuthService.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />

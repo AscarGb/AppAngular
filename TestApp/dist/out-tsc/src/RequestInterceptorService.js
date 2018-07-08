@@ -33,6 +33,7 @@ var RequestInterceptorService = /** @class */ (function () {
                         return _this.handle400Error(error);
                     case 401:
                         return _this.handle401Error(req, next);
+                    default: return rxjs_1.throwError(error);
                 }
             }
             else {

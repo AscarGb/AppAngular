@@ -27,6 +27,8 @@ var admin_component_1 = require("./admin/admin.component");
 var AuthGuardService_1 = require("src/AuthGuardService");
 var AuthService_1 = require("src/AuthService");
 var RoleGuardService_1 = require("src/RoleGuardService");
+var ng_bootstrap_1 = require("@ng-bootstrap/ng-bootstrap");
+var register_component_1 = require("./register/register.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -39,7 +41,8 @@ var AppModule = /** @class */ (function () {
                 login_component_1.LoginComponent,
                 orders_component_1.OrdersComponent,
                 order_component_1.OrderComponent,
-                admin_component_1.AdminComponent
+                admin_component_1.AdminComponent,
+                register_component_1.RegisterComponent
             ],
             imports: [
                 http_2.HttpClientModule,
@@ -56,8 +59,10 @@ var AppModule = /** @class */ (function () {
                         data: {
                             expectedRole: 'Admin'
                         }
-                    }
-                ])
+                    },
+                    { path: 'register', component: register_component_1.RegisterComponent }
+                ]),
+                ng_bootstrap_1.NgbModule.forRoot()
             ],
             providers: [
                 { provide: http_3.HTTP_INTERCEPTORS, useClass: RequestInterceptorService_1.RequestInterceptorService, multi: true },

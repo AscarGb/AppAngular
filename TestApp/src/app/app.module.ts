@@ -19,6 +19,8 @@ import { AdminComponent } from './admin/admin.component';
 import { AuthGuardService } from 'src/AuthGuardService';
 import { AuthService } from 'src/AuthService';
 import { RoleGuardService } from 'src/RoleGuardService';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
     declarations: [
@@ -28,7 +30,8 @@ import { RoleGuardService } from 'src/RoleGuardService';
         LoginComponent,
         OrdersComponent,
         OrderComponent,
-        AdminComponent
+        AdminComponent,
+        RegisterComponent
     ],
     imports: [
         HttpClientModule,
@@ -44,7 +47,10 @@ import { RoleGuardService } from 'src/RoleGuardService';
                 path: 'admin', component: AdminComponent, canActivate: [RoleGuardService],
                 data: {
                     expectedRole: 'Admin'
-                } }])
+                }
+            },
+            { path: 'register', component: RegisterComponent }]),
+        NgbModule.forRoot()
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true },

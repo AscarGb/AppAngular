@@ -70,13 +70,13 @@ var AppService = /** @class */ (function () {
     };
     AppService.prototype.checkCredentials = function () {
         if (!ng2_cookies_1.Cookie.check('access_token')) {
-            this._router.navigate(['/login']);
+            this._router.navigate(['login']);
         }
     };
     AppService.prototype.logout = function () {
         ng2_cookies_1.Cookie.delete('access_token');
         ng2_cookies_1.Cookie.delete('refresh_token');
-        this._router.navigate(['/login']);
+        this._router.navigate(['login']);
     };
     AppService = __decorate([
         core_1.Injectable(),

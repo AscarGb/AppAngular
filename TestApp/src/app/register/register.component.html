@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="middle-wnd">
+        <h1>Register</h1>
+        <input placeholder="Login" type="text" [(ngModel)]="loginData.username" class="form-control my-2" />
+        <input placeholder="Password" type="password" [(ngModel)]="loginData.password" class="form-control my-2" />
+        <input placeholder="ConfirmPassword" type="password" [(ngModel)]="loginData.ConfirmPassword" class="form-control my-2" />
+        <button (click)="registerUser()" type="submit" class="btn btn-primary my-2">Next</button>
+        <ngb-alert *ngIf="Message" type="danger" (close)="Message = null">{{ Message }}</ngb-alert>
+    </div>
+</div>

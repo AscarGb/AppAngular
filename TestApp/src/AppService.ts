@@ -73,13 +73,13 @@ export class AppService {
 
     checkCredentials() {
         if (!Cookie.check('access_token')) {
-            this._router.navigate(['/login']);
+            this._router.navigate(['login']);
         }
     }
 
     logout() {
         Cookie.delete('access_token');
         Cookie.delete('refresh_token');
-        this._router.navigate(['/login']);
+        this._router.navigate(['login']);
     }
 }
