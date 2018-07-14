@@ -17,7 +17,8 @@ export class HomeComponent implements OnInit {
   }
 
   logout() {
-    this._service.logout();
+      this._service.logout();
+      return false;
   }
 
 }

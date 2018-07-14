@@ -21,6 +21,13 @@ import { AuthService } from 'src/AuthService';
 import { RoleGuardService } from 'src/RoleGuardService';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterComponent } from './register/register.component';
+import { AppRoutingModule } from 'src/app/app-routing';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import { AppNavComponent } from './app-nav/app-nav.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { DefaultComponent } from './default/default.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +38,9 @@ import { RegisterComponent } from './register/register.component';
         OrdersComponent,
         OrderComponent,
         AdminComponent,
-        RegisterComponent
+        RegisterComponent,
+        AppNavComponent,
+        DefaultComponent
     ],
     imports: [
         HttpClientModule,
@@ -39,18 +48,11 @@ import { RegisterComponent } from './register/register.component';
         FormsModule,
         BrowserModule,
         HttpModule,
-        OAuthModule.forRoot(),
-        RouterModule.forRoot([
-            { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
-            { path: 'login', component: LoginComponent },
-            {
-                path: 'admin', component: AdminComponent, canActivate: [RoleGuardService],
-                data: {
-                    expectedRole: 'Admin'
-                }
-            },
-            { path: 'register', component: RegisterComponent }]),
-        NgbModule.forRoot()
+      //  OAuthModule.forRoot(),
+        AppRoutingModule,
+        NgbModule.forRoot(),
+
+        BrowserAnimationsModule, MatButtonModule, MatCheckboxModule, LayoutModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true },

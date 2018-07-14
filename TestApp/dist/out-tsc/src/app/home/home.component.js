@@ -20,6 +20,7 @@ var HomeComponent = /** @class */ (function () {
     };
     HomeComponent.prototype.logout = function () {
         this._service.logout();
+        return false;
     };
     HomeComponent = __decorate([
         core_1.Component({

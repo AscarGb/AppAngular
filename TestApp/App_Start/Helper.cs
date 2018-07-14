@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Web.Configuration;
 
 namespace TestApp.App_Start
 {
@@ -9,7 +10,8 @@ namespace TestApp.App_Start
         {
             using (HashAlgorithm hashAlgorithm = new SHA256CryptoServiceProvider())
             {
-                byte[] byteValue = System.Text.Encoding.UTF8.GetBytes(input);
+                byte[] byteValue = System.Text.Encoding.UTF8.GetBytes(input
+                    + WebConfigurationManager.AppSettings["Hash"]);
                 byte[] byteHash = hashAlgorithm.ComputeHash(byteValue);
                 return Convert.ToBase64String(byteHash);
             }

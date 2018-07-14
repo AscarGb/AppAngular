@@ -150,8 +150,12 @@
     <Content Include="Global.asax" />
     <Content Include="src\app\admin\admin.component.css" />
     <Content Include="src\app\admin\admin.component.html" />
+    <Content Include="src\app\app-nav\app-nav.component.css" />
+    <Content Include="src\app\app-nav\app-nav.component.html" />
     <Content Include="src\app\app.component.css" />
     <Content Include="src\app\app.component.html" />
+    <Content Include="src\app\default\default.component.css" />
+    <Content Include="src\app\default\default.component.html" />
     <Content Include="src\app\orders\orders.component.css" />
     <Content Include="src\app\orders\orders.component.html" />
     <Content Include="src\app\foo\foo.component.css" />
@@ -225,9 +229,14 @@
     <TypeScriptCompile Include="src\AppService.ts" />
     <TypeScriptCompile Include="src\app\admin\admin.component.spec.ts" />
     <TypeScriptCompile Include="src\app\admin\admin.component.ts" />
+    <TypeScriptCompile Include="src\app\app-nav\app-nav.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\app-nav\app-nav.component.ts" />
+    <TypeScriptCompile Include="src\app\app-routing.ts" />
     <TypeScriptCompile Include="src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
+    <TypeScriptCompile Include="src\app\default\default.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\default\default.component.ts" />
     <TypeScriptCompile Include="src\app\orders\orders.component.spec.ts" />
     <TypeScriptCompile Include="src\app\orders\orders.component.ts" />
     <TypeScriptCompile Include="src\app\foo\foo.component.spec.ts" />

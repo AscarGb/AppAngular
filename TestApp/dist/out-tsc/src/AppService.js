@@ -58,9 +58,9 @@ var AppService = /** @class */ (function () {
     };
     AppService.prototype.saveToken = function (token) {
         var store_period = 365;
-        ng2_cookies_1.Cookie.set("access_token", token.access_token, store_period);
-        ng2_cookies_1.Cookie.set("refresh_token", token.refresh_token, store_period);
-        ng2_cookies_1.Cookie.set("roles", token.roles, store_period);
+        ng2_cookies_1.Cookie.set("access_token", token.access_token, store_period, '/');
+        ng2_cookies_1.Cookie.set("refresh_token", token.refresh_token, store_period, '/');
+        ng2_cookies_1.Cookie.set("roles", token.roles, store_period, '/');
     };
     AppService.prototype.userRoles = function () {
         return JSON.parse(ng2_cookies_1.Cookie.get('roles'));
@@ -74,8 +74,9 @@ var AppService = /** @class */ (function () {
         }
     };
     AppService.prototype.logout = function () {
-        ng2_cookies_1.Cookie.delete('access_token');
-        ng2_cookies_1.Cookie.delete('refresh_token');
+        ng2_cookies_1.Cookie.delete('access_token', '/');
+        ng2_cookies_1.Cookie.delete('refresh_token', '/');
+        ng2_cookies_1.Cookie.delete('roles', '/');
         this._router.navigate(['login']);
     };
     AppService = __decorate([

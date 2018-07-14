@@ -31,11 +31,11 @@ export class AppService {
         params.append('username', loginData.username);
         params.append('password', loginData.password);
         params.append('grant_type', 'password');
-        params.append('client_id', 'ngAuth');  
+        params.append('client_id', 'ngAuth');
 
         let headers = new HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
 
-        this.http.post<AuthData>(this.serverAddr + '/token', params.toString(), { headers: headers })            
+        this.http.post<AuthData>(this.serverAddr + '/token', params.toString(), { headers: headers })
             .subscribe(
             data => {
                 this.saveToken(data);
@@ -43,7 +43,7 @@ export class AppService {
             });
     }
 
-    getAuthToken() {        
+    getAuthToken() {
         return Cookie.get('access_token');
     }
 
@@ -51,16 +51,16 @@ export class AppService {
         let params = new URLSearchParams();
         params.append('refresh_token', Cookie.get('refresh_token'));
         params.append('grant_type', 'refresh_token');
-        params.append('client_id', 'ngAuth');        
+        params.append('client_id', 'ngAuth');
         let headers = new HttpHeaders({ 'Content-type': 'application/x-www-form-urlencoded; charset=utf-8' });
         return this.http.post<AuthData>(this.serverAddr + '/token', params.toString(), { headers: headers });
     }
 
     saveToken(token: AuthData) {
         let store_period = 365;
-        Cookie.set("access_token", token.access_token, store_period);
-        Cookie.set("refresh_token", token.refresh_token, store_period);
-        Cookie.set("roles", token.roles, store_period);
+        Cookie.set("access_token", token.access_token, store_period, '/');
+        Cookie.set("refresh_token", token.refresh_token, store_period, '/');
+        Cookie.set("roles", token.roles, store_period, '/');
     }
 
     userRoles(): string[] {
@@ -78,8 +78,9 @@ export class AppService {
     }
 
     logout() {
-        Cookie.delete('access_token');
-        Cookie.delete('refresh_token');
+        Cookie.delete('access_token', '/');
+        Cookie.delete('refresh_token', '/');
+        Cookie.delete('roles', '/');
         this._router.navigate(['login']);
     }
 }
