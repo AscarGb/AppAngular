@@ -20,3 +20,12 @@ label {
     margin: 0 auto;
     width: 400px;
 }
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+
+    > * {
+        width: 100%;
+    }
+}

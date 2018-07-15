@@ -59,7 +59,17 @@ var AppModule = /** @class */ (function () {
                 //  OAuthModule.forRoot(),
                 app_routing_1.AppRoutingModule,
                 ng_bootstrap_1.NgbModule.forRoot(),
-                animations_1.BrowserAnimationsModule, material_1.MatButtonModule, material_1.MatCheckboxModule, layout_1.LayoutModule, material_1.MatToolbarModule, material_1.MatSidenavModule, material_1.MatIconModule, material_1.MatListModule
+                animations_1.BrowserAnimationsModule,
+                material_1.MatButtonModule,
+                material_1.MatCheckboxModule,
+                layout_1.LayoutModule,
+                material_1.MatToolbarModule,
+                material_1.MatSidenavModule,
+                material_1.MatIconModule,
+                material_1.MatListModule,
+                material_1.MatCardModule,
+                material_1.MatFormFieldModule,
+                material_1.MatInputModule
             ],
             providers: [
                 { provide: http_3.HTTP_INTERCEPTORS, useClass: RequestInterceptorService_1.RequestInterceptorService, multi: true },

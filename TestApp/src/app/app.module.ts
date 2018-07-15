@@ -24,7 +24,10 @@ import { RegisterComponent } from './register/register.component';
 import { AppRoutingModule } from 'src/app/app-routing';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import {
+    MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule,
+    MatCardModule, MatFormFieldModule, MatInputModule
+} from '@angular/material';
 import { AppNavComponent } from './app-nav/app-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DefaultComponent } from './default/default.component';
@@ -48,11 +51,21 @@ import { DefaultComponent } from './default/default.component';
         FormsModule,
         BrowserModule,
         HttpModule,
-      //  OAuthModule.forRoot(),
+        //  OAuthModule.forRoot(),
         AppRoutingModule,
         NgbModule.forRoot(),
 
-        BrowserAnimationsModule, MatButtonModule, MatCheckboxModule, LayoutModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        LayoutModule,
+        MatToolbarModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true },

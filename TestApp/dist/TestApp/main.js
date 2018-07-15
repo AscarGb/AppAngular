@@ -486,7 +486,7 @@ module.exports = ".sidenav-container {\n  height: 100%;\n}\n\n.sidenav {\n  widt
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-sidenav-container class=\"sidenav-container\">\n  <mat-sidenav\n    #drawer\n    class=\"sidenav\"\n    fixedInViewport=\"true\"\n    [attr.role]=\"(isHandset$ | async) ? 'dialog' : 'navigation'\"\n    [mode]=\"(isHandset$ | async) ? 'over' : 'side'\"\n    [opened]=\"!(isHandset$ | async)\">\n    <mat-toolbar color=\"primary\">Menu</mat-toolbar>\n    <mat-nav-list>\n      <a mat-list-item href=\"#\">Link 1</a>\n      <a mat-list-item href=\"#\">Link 2</a>\n      <a mat-list-item href=\"#\">Link 3</a>\n    </mat-nav-list>\n  </mat-sidenav>\n  <mat-sidenav-content>\r\n      <mat-toolbar color=\"primary\">\r\n          <button type=\"button\"\r\n                  aria-label=\"Toggle sidenav\"\r\n                  mat-icon-button\r\n                  (click)=\"drawer.toggle()\"\r\n                  *ngIf=\"isHandset$ | async\">\r\n              <mat-icon aria-label=\"Side nav toggle icon\">menu</mat-icon>\r\n          </button>\r\n          <span>TestApp</span>\r\n      </mat-toolbar>\r\n      <!-- Add Content Here -->\r\n      <router-outlet></router-outlet>\r\n  </mat-sidenav-content>\n</mat-sidenav-container>\n"
+module.exports = "<mat-sidenav-container class=\"sidenav-container\">\r\n    <mat-sidenav #drawer\r\n                 class=\"sidenav\"\r\n                 fixedInViewport=\"true\"\r\n                 [attr.role]=\"(isHandset$ | async) ? 'dialog' : 'navigation'\"\r\n                 [mode]=\"(isHandset$ | async) ? 'over' : 'side'\"\r\n                 [opened]=\"(isHandset$ | async) && opened\">\r\n\r\n        <mat-nav-list>\r\n            <a mat-list-item href=\"#\">Link 1</a>\r\n            <a mat-list-item href=\"#\">Link 2</a>\r\n            <a mat-list-item href=\"#\">Link 3</a>\r\n        </mat-nav-list>\r\n    </mat-sidenav>\r\n\r\n    <mat-sidenav-content style=\"min-height:100vh;display:flex;flex-direction:column\">\r\n        <mat-toolbar color=\"primary\" class=\"mat-elevation-z6\">\r\n            <button type=\"button\"\r\n                    aria-label=\"Toggle sidenav\"\r\n                    mat-icon-button\r\n                    (click)=\"drawer.toggle()\"\r\n                    *ngIf=\"isHandset$ | async\">\r\n                <mat-icon aria-label=\"Side nav toggle icon\">menu</mat-icon>\r\n            </button>\r\n            <span>TestApp</span>\r\n        </mat-toolbar>\r\n        <!-- Add Content Here -->\r\n        <div style=\"display:flex; flex:1\">\r\n            <mat-nav-list *ngIf=\"!(isHandset$ | async)\" class=\"sidenav\">\r\n                <a mat-list-item href=\"#\">Link 1</a>\r\n                <a mat-list-item href=\"#\">Link 2</a>\r\n                <a mat-list-item href=\"#\">Link 3</a>\r\n            </mat-nav-list>\r\n            <router-outlet style=\"display:flex\"></router-outlet>\r\n        </div>\r\n    </mat-sidenav-content>\r\n</mat-sidenav-container>\r\n"
 
 /***/ }),
 
@@ -756,7 +756,17 @@ var AppModule = /** @class */ (function () {
                 //  OAuthModule.forRoot(),
                 src_app_app_routing__WEBPACK_IMPORTED_MODULE_20__["AppRoutingModule"],
                 _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_18__["NgbModule"].forRoot(),
-                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_21__["BrowserAnimationsModule"], _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatCheckboxModule"], _angular_cdk_layout__WEBPACK_IMPORTED_MODULE_24__["LayoutModule"], _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatToolbarModule"], _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatSidenavModule"], _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatIconModule"], _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatListModule"]
+                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_21__["BrowserAnimationsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatButtonModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatCheckboxModule"],
+                _angular_cdk_layout__WEBPACK_IMPORTED_MODULE_24__["LayoutModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatToolbarModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatSidenavModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatIconModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatListModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatCardModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatFormFieldModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_22__["MatInputModule"]
             ],
             providers: [
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_12__["HTTP_INTERCEPTORS"], useClass: src_RequestInterceptorService__WEBPACK_IMPORTED_MODULE_13__["RequestInterceptorService"], multi: true },
@@ -927,7 +937,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "    \r\n<span>Welcome !!</span>\r\n<a (click)=\"logout()\" href=\"\">Logout</a>\r\n<foo-details></foo-details>\r\n<!--app-orders></!--app-orders-->"
+module.exports = "<div style=\"margin:auto\">\r\n    <mat-card>\r\n        <span>Welcome !!</span>\r\n        <a (click)=\"logout()\" href=\"\">Logout</a>\r\n        <foo-details></foo-details>\r\n        <!--app-orders></!--app-orders-->\r\n    </mat-card>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -999,7 +1009,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n    <div class=\"middle-wnd\">\r\n        <h1>Login</h1>\r\n        <input type=\"text\" placeholder=\"Login\" [(ngModel)]=\"loginData.username\" class=\"form-control my-2\" />\r\n        <input type=\"password\" placeholder=\"Password\" [(ngModel)]=\"loginData.password\" class=\"form-control my-2\" />\r\n        <button (click)=\"login()\" type=\"submit\" class=\"btn btn-primary my-2\">Login</button>\r\n        <button (click)=\"register()\" type=\"button\" class=\"btn btn-primary my-2 mx-2\">Register</button>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<div class=\"middle-wnd\">\r\n    <mat-toolbar color=\"primary\">\r\n        <mat-toolbar-row>\r\n            <span>Please login to continue</span>\r\n        </mat-toolbar-row>\r\n    </mat-toolbar>\r\n    <mat-card>\r\n        <div class=\"example-container\">\r\n            <mat-form-field>\r\n                <input matInput placeholder=\"Login\" [(ngModel)]=\"loginData.username\">\r\n            </mat-form-field>\r\n\r\n            <mat-form-field>\r\n                <input matInput placeholder=\"Password\" [(ngModel)]=\"loginData.password\" [type]=\"hide ? 'password' : 'text'\">\r\n                <mat-icon matSuffix (click)=\"hide = !hide\">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>\r\n            </mat-form-field>\r\n        </div>\r\n\r\n        <button mat-raised-button color=\"primary\" (click)=\"login()\" mat-button>Login</button>\r\n        <button (click)=\"register()\" mat-button>Sign up</button>\r\n    </mat-card>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1032,6 +1042,7 @@ var LoginComponent = /** @class */ (function () {
     function LoginComponent(_router, _service) {
         this._router = _router;
         this._service = _service;
+        this.hide = true;
         this.loginData = { username: "", password: "" };
     }
     LoginComponent.prototype.ngOnInit = function () {
