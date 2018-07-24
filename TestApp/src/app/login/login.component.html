@@ -1,22 +1,32 @@
-<div class="middle-wnd">
-    <mat-toolbar color="primary">
-        <mat-toolbar-row>
-            <span>Please login to continue</span>
-        </mat-toolbar-row>
-    </mat-toolbar>
-    <mat-card>
-        <div class="example-container">
-            <mat-form-field>
-                <input matInput placeholder="Login" [(ngModel)]="loginData.username">
-            </mat-form-field>
+<div class="mid-container">
+    <div>        
+        <mat-card style="width:400px">
+            <mat-card-title color="primary">
+                Login
+            </mat-card-title>
 
-            <mat-form-field>
-                <input matInput placeholder="Password" [(ngModel)]="loginData.password" [type]="hide ? 'password' : 'text'">
-                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-            </mat-form-field>
-        </div>
+            <mat-card-subtitle>
+                Please login to continue
+            </mat-card-subtitle>
 
-        <button mat-raised-button color="primary" (click)="login()" mat-button>Login</button>
-        <button (click)="register()" mat-button>Sign up</button>
-    </mat-card>
+            <mat-card-content>
+                <div class="example-container">
+                    <mat-form-field>
+                        <input matInput placeholder="Login" [(ngModel)]="loginData.username">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput placeholder="Password" [(ngModel)]="loginData.password" [type]="hide ? 'password' : 'text'">
+                        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="login()" mat-button>Login</button>
+                <button (click)="register()" mat-button>Sign up</button>
+            </mat-card-actions>    
+
+        </mat-card>
+    </div>
 </div>

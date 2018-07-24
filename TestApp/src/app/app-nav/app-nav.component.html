@@ -14,7 +14,11 @@
     </mat-sidenav>
 
     <mat-sidenav-content style="min-height:100vh;display:flex;flex-direction:column">
+
         <mat-toolbar color="primary" class="mat-elevation-z6">
+
+            <span>TestApp</span>
+            <span style="flex:auto"></span>
             <button type="button"
                     aria-label="Toggle sidenav"
                     mat-icon-button
@@ -22,16 +26,30 @@
                     *ngIf="isHandset$ | async">
                 <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
-            <span>TestApp</span>
         </mat-toolbar>
+
         <!-- Add Content Here -->
-        <div style="display:flex; flex:1">
-            <mat-nav-list *ngIf="!(isHandset$ | async)" class="sidenav">
-                <a mat-list-item href="#">Link 1</a>
-                <a mat-list-item href="#">Link 2</a>
-                <a mat-list-item href="#">Link 3</a>
-            </mat-nav-list>
-            <router-outlet style="display:flex"></router-outlet>
+        <div style="display:flex;flex-direction:row;flex:auto; align-items:stretch">
+
+            <div class="mat-elevation-z6">
+                <mat-nav-list *ngIf="!(isHandset$ | async)" class="sidenav" style="height:100%">
+                    <a mat-list-item href="#">Link 1</a>
+                    <a mat-list-item href="#">Link 2</a>
+                    <a mat-list-item href="#">Link 3</a>
+                </mat-nav-list>
+            </div>
+
+            <div style="flex:auto">
+                <router-outlet style="height:100%"></router-outlet>
+            </div>
+
+
+
         </div>
+
+        <div class="mat-toolbar mat-primary mat-elevation-z6" style="height:50px;display:flex;align-items: center;justify-content: center;">
+            footer
+        </div>
+
     </mat-sidenav-content>
 </mat-sidenav-container>
